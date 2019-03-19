@@ -1,13 +1,14 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: source-to-image
+  name: s2i-task-java
 spec:
   inputs:
     params:
     - name: Source
       description: Name of the remote source
     - name: Builder
+      default: fabric8/s2i-java:latest
       description: Name of the builder image
     - name: ImageOutput
       description: Image Output
