@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: s2i-java-run
+spec:
+  taskRef:
+    name: source-to-image
+  serviceAccount: s2i-build-robot
+  inputs:
+    params:
+    - name: Source
+      value: https://github.com/vorburger/s2i-java-example
+    - name: Builder
+      value: fabric8/s2i-java
+    - name: ImageOutput
+      value: quay.io/chmouel/tekton-s2i-java-example
+  trigger:
+    type: manual

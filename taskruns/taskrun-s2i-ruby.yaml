@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: s2i-ruby-run
+spec:
+  taskRef:
+    name: source-to-image
+  serviceAccount: s2i-build-robot
+  inputs:
+    params:
+    - name: Source
+      value: https://github.com/openshift/ruby-hello-world
+    - name: Builder
+      value: centos/ruby-22-centos7
+    - name: ImageOutput
+      value: quay.io/chmouel/tekton-s2i-ruby-example
+  trigger:
+    type: manual
