@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: s2i-task-nodejs
+spec:
+  inputs:
+    params:
+    - name: Source
+      description: Name of the remote source
+    - name: Builder
+      default: nodeshift/centos7-s2i-nodejs:latest
+      description: Name of the builder image
+    - name: ImageOutput
+      description: Image Output
+  steps:
+  - name: s2ibuild
+    image: quay.io/chmouel/source-to-image:latest
+    command: ['/usr/local/bin/s2i']
+    args: ["build",
+           "${inputs.params.Source}",
+           "${inputs.params.Builder}",
+           "${inputs.params.ImageOutput}"]
+    volumeMounts:
+      - name: docker-socket
+        mountPath: /var/run/docker.sock
+  - name: docker-push
+    image: gcr.io/cloud-builders/docker # Tried with buildah/podman and that doesn't work
+    args: ['push', '${inputs.params.ImageOutput}']
+    volumeMounts:
+      - name: docker-socket
+        mountPath: /var/run/docker.sock
+  volumes:
+    - name: docker-socket
+      hostPath:
+        path: /var/run/docker.sock
+        type: Socket

@@ -4,14 +4,12 @@ metadata:
   name: s2i-nodejs-run
 spec:
   taskRef:
-    name: source-to-image
+    name: s2i-task-nodejs
   serviceAccount: s2i-build-robot
   inputs:
     params:
     - name: Source
       value: https://github.com/nodeshift-starters/nodejs-rest-http
-    - name: Builder
-      value: nodeshift/centos7-s2i-nodejs:latest
     - name: ImageOutput
       value: quay.io/chmouel/tekton-s2i-nodejs-example
   trigger:
