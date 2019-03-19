@@ -16,16 +16,19 @@ spec:
   - name: s2ibuild
     image: quay.io/chmouel/source-to-image:latest
     command: ['/usr/local/bin/s2i']
-    args: ["build",
-           "${inputs.params.Source}",
-           "${inputs.params.Builder}",
-           "${inputs.params.ImageOutput}"]
+    args:
+    - build
+    - ${inputs.params.Source}
+    - ${inputs.params.Builder}
+    - ${inputs.params.ImageOutput}
     volumeMounts:
       - name: docker-socket
         mountPath: /var/run/docker.sock
   - name: docker-push
     image: gcr.io/cloud-builders/docker # Tried with buildah/podman and that doesn't work
-    args: ['push', '${inputs.params.ImageOutput}']
+    args:
+    - push
+    - ${inputs.params.ImageOutput}
     volumeMounts:
       - name: docker-socket
         mountPath: /var/run/docker.sock
